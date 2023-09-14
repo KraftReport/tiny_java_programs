@@ -1,0 +1,142 @@
+import java.util.*;
+
+public class Main {
+   static boolean tf = true;
+    static ArrayList<Integer> playerPostion = new ArrayList<>();
+    static ArrayList<Integer> cpuPosition = new ArrayList<>();
+    public static void main(String[] args) {
+        String [][] array = {
+                {" ","|"," ","|"," "},
+                {"-","+","-","+","-"},
+                {" ","|"," ","|"," "},
+                {"-","+","-","+","-"},
+                {" ","|"," ","|"," "}
+        };
+        while (tf == true){
+            Scanner s = new Scanner(System.in);
+            System.out.println("Enter number 1 through 9");
+            int inpu = s.nextInt();
+            while (playerPostion.contains(inpu)|| cpuPosition.contains(inpu)){
+                System.out.println("alreday taken position");
+                inpu=s.nextInt();
+            }
+            Random random = new Random();
+            int ran = random.nextInt(9)+1;
+            while (playerPostion.contains(ran)|| cpuPosition.contains(ran)){
+                System.out.println("alreday taken position");
+                ran = random.nextInt(9)+1;
+            }
+
+
+
+            Board board = new Board();
+
+           placeX(array,"player",inpu);
+             placeX(array,"cpu",ran);
+
+            board.showBoard(array);
+
+
+
+            String result = checkW();
+            if(result.length()>0){
+                System.out.println(result);
+                break;
+            }
+        }
+
+    }
+    public static String checkW (){
+        List topRow = Arrays.asList(1,2,3);
+        List midRow = Arrays.asList(4,5,6);
+        List botRow = Arrays.asList(7,8,9);
+        List leftCol = Arrays.asList(1,4,7);
+        List midCol = Arrays.asList(2,5,8);
+        List rightCol = Arrays.asList(3,6,9);
+        List leftCross = Arrays.asList(1,5,9);
+        List rightCross = Arrays.asList(3,5,7);
+
+        List<List> winning = new ArrayList<>();
+        winning.add(topRow);
+        winning.add(midCol);
+        winning.add(botRow);
+        winning.add(midRow);
+        winning.add(leftCol);
+        winning.add(rightCol);
+        winning.add(leftCross);
+        winning.add(rightCross);
+
+        for(List i : winning){
+            if(playerPostion.containsAll(i)){
+                String resu = "you won";
+               return resu;
+
+            }else if (cpuPosition.containsAll(i)){
+                String resu = "you lose";
+               return  resu;
+            }else if(playerPostion.size()+ cpuPosition.size() == 9) {
+                String resu = "tie";
+                return resu;
+            }
+        }
+        return "";
+    }
+
+    public static void placeX(String [][] array,String identity,int input ){
+
+
+        String symbol = "X";
+        if(identity=="player"){
+            symbol = "X";
+            playerPostion.add(input);
+        }else {
+            symbol = "0";
+            cpuPosition.add(input);
+        }
+        switch (input){
+            case 1:
+                array[0][0] = symbol;
+                break;
+            case 2:
+                array[0][2] = symbol;
+                break;
+            case 3:
+                array[0][4] = symbol;
+                break;
+            case 4:
+                array[2][0] = symbol;
+                break;
+            case 5:
+                array[2][2] = symbol;
+                break;
+            case 6:
+                array[2][4] = symbol;
+                break;
+            case 7:
+                array[4][0] = symbol;
+                break;
+            case 8:
+                array[4][2] = symbol;
+                break;
+            case 9:
+                array[4][4] = symbol;
+                break;
+            default:
+                break;
+
+        }
+    }
+}
+
+class Board{
+    public static void showBoard(String[][] array){
+        for(String[] row: array){
+            for(String e: row){
+                System.out.print(e);
+            }
+
+            System.out.println();
+        }
+    }
+}
+
